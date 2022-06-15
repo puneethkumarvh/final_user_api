@@ -1,6 +1,13 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
 
+  def typeahead
+    key = params[:input]
+    result = User.where("firstName LIKE ?", params[:input]+ "%").or(User.where("lastName LIKE ?", params[:input]+ "%")).or(User.where("email LIKE ?", params[:input]+ "%"))
+                         
+    render json: result
+  end
+
   # GET /users
   def index
     @users = User.all
